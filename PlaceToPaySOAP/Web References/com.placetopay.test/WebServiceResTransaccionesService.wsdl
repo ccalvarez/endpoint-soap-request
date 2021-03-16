@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.athservices.net/servicios/WebServiceResTransacciones" name="WebServiceResTransaccionesService" targetNamespace="http://www.athservices.net/servicios/WebServiceResTransacciones" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema targetNamespace="http://www.athservices.net/servicios/WebServiceResTransacciones" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="resultado" type="tns:resultado" />
+      <xs:complexType name="resultadoRespuestaTransacciones">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:resultado">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="respuestaTransacciones" type="tns:transaccion" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="resultado">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="mensajes" type="tns:mensaje" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="transaccion">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="x_MD5_hash" type="xs:string" />
+          <xs:element minOccurs="0" name="x_amount" type="xs:string" />
+          <xs:element minOccurs="0" name="x_auth_code" type="xs:string" />
+          <xs:element minOccurs="0" name="x_date" type="xs:string" />
+          <xs:element minOccurs="0" name="x_invoice_num" type="xs:string" />
+          <xs:element minOccurs="0" name="x_iso_error_code" type="xs:string" />
+          <xs:element minOccurs="0" name="x_iso_error_description" type="xs:string" />
+          <xs:element minOccurs="0" name="x_login" type="xs:string" />
+          <xs:element minOccurs="0" name="x_response_code" type="xs:string" />
+          <xs:element minOccurs="0" name="x_response_reason_code" type="xs:string" />
+          <xs:element minOccurs="0" name="x_response_reason_text" type="xs:string" />
+          <xs:element minOccurs="0" name="x_trans_id" type="xs:string" />
+          <xs:element minOccurs="0" name="x_type" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="mensaje">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="key" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="codigo" type="xs:int" use="required" />
+        <xs:attribute name="descripcion" type="xs:string" />
+        <xs:attribute name="tipoMensaje" type="tns:tipoMensaje" />
+      </xs:complexType>
+      <xs:simpleType name="tipoMensaje">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ERROR" />
+          <xs:enumeration value="INFORMACION" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </types>
+  <message name="WebServiceResTransacciones_consultaTransaccionesResponse">
+    <part name="return" type="tns:resultadoRespuestaTransacciones" />
+  </message>
+  <message name="WebServiceResTransacciones_consultaTransacciones">
+    <part name="x_sequence" type="xsd:string" />
+    <part name="x_amount" type="xsd:string" />
+    <part name="x_date" type="xsd:string" />
+  </message>
+  <portType name="WebServiceResTransacciones">
+    <operation name="consultaTransacciones" parameterOrder="x_sequence x_amount x_date">
+      <input message="tns:WebServiceResTransacciones_consultaTransacciones" />
+      <output message="tns:WebServiceResTransacciones_consultaTransaccionesResponse" />
+    </operation>
+  </portType>
+  <binding name="WebServiceResTransaccionesBinding" type="tns:WebServiceResTransacciones">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <operation name="consultaTransacciones">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://www.athservices.net/servicios/WebServiceResTransacciones" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://www.athservices.net/servicios/WebServiceResTransacciones" />
+      </output>
+    </operation>
+  </binding>
+  <service name="WebServiceResTransaccionesService">
+    <port name="WebServiceResTransaccionesPort" binding="tns:WebServiceResTransaccionesBinding">
+      <soap:address location="http://ath-jboss-desa:8080/paygate" />
+    </port>
+  </service>
+</definitions>
